@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<!--
+  index.html
+  ==========
+  Página principal del portafolio.
+
+  Responsabilidades:
+  - presentar identidad profesional;
+  - destacar proyectos;
+  - mostrar capacidades y trayectoria;
+  - mantener los enlaces de contacto a mano;
+  - entregar metadata SEO/social;
+  - enlazar al CV y al caso de estudio de HelpDesk.
+
+  Este archivo es ESTÁTICO: GitHub Pages puede publicarlo sin Node ni Express.
+-->
+<html lang="es" data-bs-theme="light">
+
+<head>
+  <!-- =========================================================
+       1. METADATOS BASE DEL DOCUMENTO
+       ========================================================= -->
+
+  <!-- UTF-8 permite representar correctamente tildes, ñ y otros caracteres. -->
+  <meta charset="UTF-8">
+  <!--
+    Viewport responsive:
+    hace que el ancho de la página siga el ancho real del dispositivo.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--
+    <title>:
+    aparece en la pestaña del navegador y es una señal importante para SEO.
+    Debe identificar a la persona y su rol sin ser genérico.
+  -->
+  <title>Nombre Apellido | Full Stack JavaScript Developer</title>
+  <!--
+    Meta description:
+    resume la página para buscadores y puede utilizarse como snippet.
+  -->
+  <meta name="description"
+    content="Portafolio de Nombre Apellido, desarrollador Full Stack JavaScript. Proyectos con Node.js, Express, PostgreSQL y APIs REST.">
+  <!--
+    index,follow:
+    permitimos que la Home sea indexada y que los crawlers sigan sus enlaces.
+    No es necesario declararlo siempre, pero aquí lo dejamos explícito.
+  -->
+  <meta name="robots" content="index,follow">
+
+  <!--
+    REEMPLAZAR TU_USUARIO y portfolio por los datos reales antes de publicar.
+    Si el repositorio es TU_USUARIO.github.io, la canonical de la Home será
+    simplemente https://TU_USUARIO.github.io/
+  -->
+  <link rel="canonical" href="https://leandrofuenzalida.github.io/portfolio/">
+
+  <!-- =========================================================
+       2. OPEN GRAPH Y PREVIEWS SOCIALES
+       ========================================================= -->
+
+  <!--
+    Open Graph ayuda a definir cómo se presenta el enlace al compartirlo
+    en plataformas compatibles.
+  -->
+  <meta property="og:title" content="Nombre Apellido — Full Stack JavaScript Developer">
+  <meta property="og:description"
+    content="Portafolio con proyectos Full Stack JavaScript en Node.js, Express y PostgreSQL.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://TU_USUARIO.github.io/portfolio/">
+
+  <!--
+    Cuando exista una imagen PNG/JPG pública para redes, se puede añadir:
+    <meta
+      property="og:image"
+      content="https://TU_USUARIO.github.io/portfolio/assets/social-card.png"
+    >
+  -->
+
+  <!--
+    Twitter/X Card:
+    conjunto de metadatos complementarios para previews sociales.
+  -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Nombre Apellido — Full Stack JavaScript Developer">
+  <meta name="twitter:description" content="Portafolio con proyectos Full Stack JavaScript.">
+
+  <!-- =========================================================
+       3. TEMA CLARO / OSCURO ANTES DEL PRIMER PINTADO
+       ========================================================= -->
+
+  <!--
+    Aplicamos el tema antes de pintar la página para reducir el cambio visual
+    entre modo claro y oscuro.
+  -->
+  <script>
+    /*
+      Este script es intencionalmente pequeño y está dentro del <head>.
+
+      ¿Por qué aquí?
+      Porque necesitamos decidir el tema antes de que el navegador pinte
+      visualmente la página y así reducir un "flash" entre claro y oscuro.
+    */
+    (() => {
+      // Primero buscamos una preferencia que el usuario ya haya guardado.
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      // Si no existe una preferencia guardada, usamos la preferencia del SO.
+      const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+      // Bootstrap 5.3 entiende data-bs-theme="light" y data-bs-theme="dark".
+      document.documentElement.setAttribute(
+        "data-bs-theme",
+        savedTheme ?? preferredTheme
+      );
+    })();
+  </script>
+
+  <!-- =========================================================
+       4. DATOS ESTRUCTURADOS JSON-LD
+       ========================================================= -->
+
+  <!--
+    JSON-LD describe explícitamente dos entidades:
+    - Person: el autor del portafolio.
+    - WebSite: el sitio que pertenece a esa persona.
+
+    IMPORTANTE:
+    JSON puro no admite comentarios dentro del objeto.
+    Por eso las explicaciones están fuera del <script type="application/ld+json">.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://leandrofuenzalida.github.io/portfolio/#person",
+        "name": "Nombre Apellido",
+        "url": "https://leandrofuenzalida.github.io/portfolio/",
+        "jobTitle": "Full Stack JavaScript Developer",
+        "email": "mailto:leandro.fuenzalida@gmail.com",
+        "telephone": "+56912345678",
+        "sameAs": [
+          "https://github.com/leandrofuenzalida",
+          "https://www.linkedin.com/in/leandro-fuenzalida"
+        ],
+        "knowsAbout": [
+          "JavaScript",
+          "Node.js",
+          "Express",
+          "PostgreSQL",
+          "REST APIs"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://TU_USUARIO.github.io/portfolio/#website",
+        "name": "Nombre Apellido — Portfolio",
+        "url": "https://TU_USUARIO.github.io/portfolio/",
+        "inLanguage": "es",
+        "author": {
+          "@id": "https://TU_USUARIO.github.io/portfolio/#person"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- =========================================================
+       5. ESTILOS
+       ========================================================= -->
+
+  <!-- Bootstrap resuelve grilla, navbar, botones, spacing y responsive. -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <!--
+    Nuestro CSS se carga DESPUÉS de Bootstrap para poder complementar
+    o ajustar el framework sin reescribirlo completo.
+  -->
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+  <!-- =========================================================
+       6. ACCESIBILIDAD: SALTAR AL CONTENIDO
+       ========================================================= -->
+
+  <!--
+    Este enlace aparece cuando recibe foco con teclado.
+    Permite saltar la navegación repetitiva e ir directo al <main>.
+  -->
+  <a class="skip-link" href="#main-content">
+    Saltar al contenido principal
+  </a>
+
+  <!-- =========================================================
+       7. HEADER / NAVBAR
+       ========================================================= -->
+
+  <!--
+    sticky-top mantiene la navegación disponible durante el scroll.
+    bg-body respeta automáticamente el tema claro/oscuro de Bootstrap.
+  -->
+  <header class="sticky-top border-bottom bg-body">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegación principal">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="./index.html">
+          Nombre Apellido
+        </a>
+
+        <!--
+          Botón hamburguesa de Bootstrap.
+          Solo aparece cuando el espacio horizontal no alcanza.
+        -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar" aria-expanded="false" aria-label="Abrir navegación">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="nav-link" href="#projects">Proyectos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#skills">Capacidades</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">Sobre mí</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contacto</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <!--
+                main.js busca #themeToggle y registra aquí el cambio de tema.
+              -->
+              <button id="themeToggle" class="btn btn-outline-secondary btn-sm" type="button" aria-pressed="false">
+                Cambiar tema
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =========================================================
+       8. CONTENIDO PRINCIPAL
+       ========================================================= -->
+  <main id="main-content">
+
+    <!-- =======================================================
+         HERO
+         Primera impresión: identidad, rol, propuesta y acciones.
+         ======================================================= -->
+    <section class="hero-section py-5 py-lg-6" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-8">
+            <p class="text-primary fw-semibold mb-2">
+              Hola, soy
+            </p>
+
+            <h1 id="hero-title" class="display-3 fw-bold text-balance">
+              Nombre Apellido
+            </h1>
+
+            <p class="fs-2 mb-3">
+              Full Stack JavaScript Developer
+            </p>
+
+            <p class="lead text-body-secondary col-xl-9">
+              Desarrollo aplicaciones web con Node.js, Express, PostgreSQL
+              y JavaScript, con foco en APIs REST, arquitectura clara y
+              experiencias web accesibles.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+              <a href="#projects" class="btn btn-primary btn-lg">
+                Ver proyectos
+              </a>
+              <a href="./cv.html" class="btn btn-outline-secondary btn-lg">
+                Ver CV
+              </a>
+            </div>
+
+            <nav class="d-flex flex-wrap gap-3 mt-4 professional-links" aria-label="Enlaces profesionales">
+              <a href="https://github.com/leandrofuenzalida">GitHub</a>
+              <a href="https://www.linkedin.com/in/leandro-fuenzalida">LinkedIn</a>
+              <a href="mailto:nombre@example.com">Email</a>
+              <a href="tel:+56912345678">Teléfono</a>
+            </nav>
+          </div>
+
+          <div class="col-lg-4">
+            <aside class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <p class="small text-uppercase text-body-secondary mb-2">
+                  Perfil
+                </p>
+                <p class="h5 mb-3">
+                  Full Stack JavaScript
+                </p>
+                <ul class="list-unstyled mb-0 d-grid gap-2">
+                  <li>Node.js + Express</li>
+                  <li>PostgreSQL + Sequelize</li>
+                  <li>REST APIs + JWT</li>
+                  <li>HTML + Bootstrap + JavaScript</li>
+                  <li>Git + GitHub</li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         PROYECTOS DESTACADOS
+         Evidencia concreta del trabajo realizado.
+         ======================================================= -->
+    <section id="projects" class="section-block py-5" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-heading mb-4">
+          <p class="eyebrow">Evidencia técnica</p>
+          <h2 id="projects-title" class="display-6 fw-bold">
+            Proyectos destacados
+          </h2>
+          <p class="text-body-secondary col-lg-8 mb-0">
+            En lugar de enumerar tecnologías sin contexto, cada proyecto
+            explica qué problema resuelve y qué decisiones técnicas demuestra.
+          </p>
+        </div>
+
+        <article class="card project-card border-0 shadow-sm overflow-hidden">
+          <div class="row g-0">
+            <div class="col-lg-5">
+              <div class="project-visual h-100 p-4 d-flex align-items-center" role="img"
+                aria-label="Vista representativa del gestor de tickets HelpDesk">
+                <div class="mock-window w-100">
+                  <div class="mock-window-bar">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="mock-window-body">
+                    <div class="d-flex justify-content-between gap-2 mb-3">
+                      <strong>HelpDesk</strong>
+                      <span class="badge text-bg-primary">Tickets</span>
+                    </div>
+                    <div class="mock-ticket">
+                      <span>API returns 500</span>
+                      <span class="badge text-bg-warning">In progress</span>
+                    </div>
+                    <div class="mock-ticket">
+                      <span>Reset user password</span>
+                      <span class="badge text-bg-success">Closed</span>
+                    </div>
+                    <div class="mock-ticket">
+                      <span>Upload evidence</span>
+                      <span class="badge text-bg-danger">Urgent</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-7">
+              <div class="card-body p-4 p-lg-5">
+                <p class="eyebrow">Full Stack Project</p>
+                <h3 class="card-title h2">HelpDesk</h3>
+                <p class="card-text">
+                  Aplicación para gestionar tickets de soporte mediante una
+                  API REST compartida por una interfaz Web y un cliente CLI.
+                  Incluye autenticación JWT, relaciones de datos, filtros y
+                  archivos adjuntos.
+                </p>
+
+                <ul class="project-points">
+                  <li>CRUD y filtros de tickets.</li>
+                  <li>Autenticación con bcrypt y JWT.</li>
+                  <li>PostgreSQL con Sequelize.</li>
+                  <li>Web con Handlebars, Bootstrap y Fetch.</li>
+                  <li>CLI que consume la misma API.</li>
+                </ul>
+
+                <p class="small text-body-secondary">
+                  Node.js · Express · Sequelize · PostgreSQL · Handlebars · Bootstrap
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                  <a href="./projects/helpdesk.html" class="btn btn-primary">
+                    Ver caso de estudio
+                  </a>
+
+                  <!--
+                    LINK DEL DEPLOY DE HELPDESK
+                    ===========================
+                    Después de desplegar HelpDesk en Railway:
+
+                    1. abre el servicio `helpdesk`;
+                    2. copia el dominio público generado por Railway;
+                    3. reemplaza TU_DOMINIO por el dominio REAL.
+
+                    Ejemplo:
+                    https://helpdesk-production-xxxx.up.railway.app/
+
+                    IMPORTANTE:
+                    - enlaza la HOME de la aplicación, no /api/v1/health;
+                    - prueba la URL antes de publicar el portafolio;
+                    - si todavía no existe un deploy funcional, quita
+                      temporalmente este botón en vez de publicar un link roto.
+                  -->
+                  <a href="https://helpdesk-production-c494.up.railway.app/" class="btn btn-outline-secondary"
+                    target="_blank" rel="noopener noreferrer">
+                    Demo en vivo
+                  </a>
+
+                  <a href="https://github.com/leandrofuenzalida/helpdesk" class="btn btn-outline-secondary"
+                    target="_blank" rel="noopener noreferrer">
+                    Ver código
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         CAPACIDADES
+         Agrupamos conocimientos que deberían estar respaldados
+         por proyectos, experiencia o formación.
+         ======================================================= -->
+    <section id="skills" class="section-block py-5" aria-labelledby="skills-title">
+      <div class="container">
+        <p class="eyebrow">Capacidades</p>
+        <h2 id="skills-title" class="display-6 fw-bold mb-4">
+          Tecnologías respaldadas por evidencia
+        </h2>
+
+        <div class="row g-3">
+          <div class="col-md-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Backend</h3>
+                <p class="text-body-secondary mb-0">
+                  Node.js, Express, rutas, middlewares, controllers y services.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Datos</h3>
+                <p class="text-body-secondary mb-0">
+                  PostgreSQL, SQL parametrizado, Sequelize y asociaciones.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Frontend</h3>
+                <p class="text-body-secondary mb-0">
+                  HTML semántico, Bootstrap, JavaScript, Fetch y Handlebars.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Workflow</h3>
+                <p class="text-body-secondary mb-0">
+                  Git, GitHub, Postman, testing básico y documentación técnica.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         ABOUT / TRAYECTORIA
+         Primero identidad laboral; luego contexto personal breve.
+         ======================================================= -->
+    <section id="about" class="section-block py-5" aria-labelledby="about-title">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <p class="eyebrow">Sobre mí</p>
+            <h2 id="about-title" class="display-6 fw-bold">
+              Perfil profesional
+            </h2>
+            <p class="lead">
+              Soy desarrollador Full Stack JavaScript con foco en aplicaciones
+              web construidas con Node.js, Express y PostgreSQL.
+            </p>
+            <p>
+              Durante mi formación he trabajado con APIs REST, autenticación,
+              bases de datos relacionales, interfaces web, CLI y control de
+              versiones. Me interesa construir productos que no solo funcionen,
+              sino que también puedan explicarse, mantenerse y demostrarse.
+            </p>
+            <p class="mb-0">
+              Fuera del desarrollo me interesan la música, la fotografía y el
+              aprendizaje continuo. Este párrafo debe reemplazarse por una nota
+              personal breve y verdadera del autor.
+            </p>
+          </div>
+
+          <div class="col-lg-5">
+            <aside class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <h3 class="h5">Trayectoria</h3>
+                <ol class="timeline list-unstyled mb-0">
+                  <li>
+                    <strong>Formación Full Stack JavaScript</strong>
+                    <span>Fundamentos, frontend, backend, SQL y APIs.</span>
+                  </li>
+                  <li>
+                    <strong>Proyecto HelpDesk</strong>
+                    <span>Aplicación integrada con Web, API, CLI y PostgreSQL.</span>
+                  </li>
+                  <li>
+                    <strong>Próximo objetivo</strong>
+                    <span>Incorporarme a un equipo de desarrollo y seguir creciendo.</span>
+                  </li>
+                </ol>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         CONTACTO
+         Repetimos canales importantes para reducir fricción.
+         ======================================================= -->
+    <section id="contact" class="section-block py-5" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-panel p-4 p-lg-5 rounded-4">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+              <p class="eyebrow">Contacto</p>
+              <h2 id="contact-title" class="display-6 fw-bold">
+                Conversemos
+              </h2>
+              <p class="lead mb-0">
+                Si quieres conversar sobre una oportunidad, proyecto o
+                colaboración, estos son mis canales profesionales.
+              </p>
+            </div>
+
+            <div class="col-lg-5">
+              <div class="d-grid gap-2">
+                <a class="btn btn-primary" href="mailto:nombre@example.com">
+                  nombre@example.com
+                </a>
+                <a class="btn btn-outline-secondary" href="tel:+56912345678">
+                  +56 9 1234 5678
+                </a>
+                <a class="btn btn-outline-secondary" href="https://www.linkedin.com/in/leandro-fuenzalida">
+                  LinkedIn
+                </a>
+                <a class="btn btn-outline-secondary" href="https://github.com/leandrofuenzalida">
+                  GitHub
+                </a>
+                <a class="btn btn-outline-secondary" href="./cv.html">
+                  Ver CV
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================
+       9. FOOTER
+       ========================================================= -->
+
+  <!--
+    El footer vuelve a exponer identidad y enlaces importantes.
+    El año se completa desde main.js mediante data-current-year.
+  -->
+  <footer class="border-top py-4">
+    <div class="container d-flex flex-column flex-md-row gap-2 justify-content-between">
+      <p class="mb-0 small text-body-secondary">
+        © <span data-current-year></span> Nombre Apellido.
+      </p>
+      <nav class="d-flex flex-wrap gap-3 small" aria-label="Enlaces del pie">
+        <a href="https://github.com/leandrofuenzalida">GitHub</a>
+        <a href="https://www.linkedin.com/in/leandro-fuenzalida">LinkedIn</a>
+        <a href="mailto:nombre@example.com">Email</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       10. JAVASCRIPT
+       ========================================================= -->
+
+  <!--
+    bootstrap.bundle incluye el JavaScript necesario para componentes
+    como la navbar colapsable.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <!--
+    main.js contiene comportamiento propio.
+    defer evita bloquear el parseo del HTML.
+  -->
+  <script src="./js/main.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<!--
+  projects/helpdesk.html
+  ======================
+  Caso de estudio del proyecto Full Stack HelpDesk.
+
+  Esta página NO ejecuta HelpDesk.
+  Su responsabilidad es PRESENTAR el proyecto:
+  problema, solución, arquitectura, stack, decisiones y aprendizajes.
+
+  Como este archivo vive dentro de projects/, las rutas hacia recursos
+  de la raíz utilizan ../
+-->
+<html lang="es" data-bs-theme="light">
+<head>
+  <!-- =========================================================
+       1. SEO ESPECÍFICO DEL PROYECTO
+       Cada proyecto debería tener title/description propios.
+       ========================================================= -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HelpDesk — Express & PostgreSQL | Nombre Apellido</title>
+  <meta
+    name="description"
+    content="Caso de estudio de HelpDesk, aplicación Full Stack de gestión de tickets construida con Express, Sequelize, PostgreSQL y JWT."
+  >
+  <!-- Queremos que este caso de estudio pueda indexarse. -->
+  <meta name="robots" content="index,follow">
+  <link
+    rel="canonical"
+    href="https://TU_USUARIO.github.io/portfolio/projects/helpdesk.html"
+  >
+
+  <!-- Open Graph específico para compartir ESTE proyecto. -->
+  <meta
+    property="og:title"
+    content="HelpDesk — Full Stack Ticket Management"
+  >
+  <meta
+    property="og:description"
+    content="Caso de estudio con API REST, JWT, PostgreSQL, Web y CLI."
+  >
+  <meta property="og:type" content="article">
+  <meta
+    property="og:url"
+    content="https://TU_USUARIO.github.io/portfolio/projects/helpdesk.html"
+  >
+
+  <meta name="twitter:card" content="summary">
+  <meta
+    name="twitter:title"
+    content="HelpDesk — Express & PostgreSQL | Nombre Apellido"
+  >
+  <meta
+    name="twitter:description"
+    content="Caso de estudio Full Stack JavaScript con Express, Sequelize, PostgreSQL y JWT."
+  >
+
+  <!--
+    Inicialización temprana del tema.
+    Usa la misma key de localStorage que la Home para mantener consistencia.
+  -->
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+      document.documentElement.setAttribute(
+        "data-bs-theme",
+        savedTheme ?? preferredTheme
+      );
+    })();
+  </script>
+
+  <!--
+    JSON-LD:
+    - WebApplication describe HelpDesk.
+    - BreadcrumbList describe la jerarquía Portafolio > HelpDesk.
+
+    LINK DEL DEPLOY:
+    ----------------
+    Después de obtener el dominio público de Railway, reemplazar:
+
+    https://TU_DOMINIO.up.railway.app/
+
+    por la URL REAL de HelpDesk.
+
+    En WebApplication, `url` representa la aplicación funcionando.
+    La canonical de esta página sigue apuntando al caso de estudio del
+    portafolio porque son recursos distintos.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://TU_USUARIO.github.io/portfolio/projects/helpdesk.html#app",
+        "name": "HelpDesk",
+        "url": "https://TU_DOMINIO.up.railway.app/",
+        "description": "Aplicación Full Stack para gestión de tickets de soporte.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "featureList": [
+          "JWT authentication",
+          "Ticket CRUD",
+          "Ticket filters",
+          "PostgreSQL persistence",
+          "File attachments",
+          "Web client",
+          "CLI client"
+        ],
+        "author": {
+          "@type": "Person",
+          "@id": "https://TU_USUARIO.github.io/portfolio/#person",
+          "name": "Nombre Apellido"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Portafolio",
+            "item": "https://TU_USUARIO.github.io/portfolio/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "HelpDesk",
+            "item": "https://TU_USUARIO.github.io/portfolio/projects/helpdesk.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Bootstrap + CSS propio. -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+    crossorigin="anonymous"
+  >
+  <!--
+    ../ sube desde projects/ hasta la raíz y luego entra a css/.
+  -->
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+  <!-- Accesibilidad: salto directo al contenido del caso de estudio. -->
+  <a class="skip-link" href="#main-content">
+    Saltar al contenido principal
+  </a>
+
+  <!-- =========================================================
+       2. NAVEGACIÓN DEL CASO DE ESTUDIO
+       ========================================================= -->
+  <header class="sticky-top border-bottom bg-body">
+    <nav class="navbar navbar-expand-lg" aria-label="Navegación del proyecto">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="../index.html">
+          Nombre Apellido
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#projectNavbar"
+          aria-controls="projectNavbar"
+          aria-expanded="false"
+          aria-label="Abrir navegación"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="projectNavbar">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html#projects">Proyectos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html#about">Sobre mí</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html#contact">Contacto</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <button
+                id="themeToggle"
+                class="btn btn-outline-secondary btn-sm"
+                type="button"
+                aria-pressed="false"
+              >
+                Cambiar tema
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =========================================================
+       3. CONTENIDO PRINCIPAL DEL PROYECTO
+       ========================================================= -->
+  <main id="main-content">
+
+    <!-- Hero: nombre del producto, resumen y acciones principales. -->
+    <header class="project-hero py-5 py-lg-6">
+      <div class="container">
+        <nav aria-label="Breadcrumb" class="mb-4">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="../index.html">Portafolio</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              HelpDesk
+            </li>
+          </ol>
+        </nav>
+
+        <p class="eyebrow">Full Stack Project</p>
+        <h1 class="display-3 fw-bold">HelpDesk</h1>
+        <p class="lead col-lg-9">
+          Aplicación Full Stack para gestionar tickets de soporte mediante
+          una API REST común a una interfaz Web, un cliente CLI y herramientas
+          de prueba como Postman.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <!--
+            LINK PRINCIPAL AL DEPLOY
+            ========================
+            Reemplazar TU_DOMINIO por el dominio público REAL del servicio
+            HelpDesk en Railway.
+
+            Ejemplo:
+            https://helpdesk-production-xxxx.up.railway.app/
+
+            Antes de publicar:
+            - comprobar que la Home abre;
+            - comprobar login y el flujo principal;
+            - NO enlazar /api/v1/health como demo;
+            - si cambia el dominio, actualizar este link, el de index.html
+              y WebApplication.url del JSON-LD.
+          -->
+          <a
+            class="btn btn-primary btn-lg"
+            href="https://TU_DOMINIO.up.railway.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Demo en vivo
+          </a>
+
+          <a
+            class="btn btn-outline-secondary btn-lg"
+            href="https://github.com/TU_USUARIO/helpdesk"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver repositorio
+          </a>
+
+          <a class="btn btn-outline-secondary btn-lg" href="../cv.html">
+            Ver CV
+          </a>
+
+          <a class="btn btn-outline-secondary btn-lg" href="../index.html#contact">
+            Contacto
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!--
+      Resumen de capacidades:
+      permite reconocer rápidamente qué áreas técnicas demuestra HelpDesk.
+    -->
+    <section class="section-block py-5" aria-labelledby="overview-title">
+      <div class="container">
+        <p class="eyebrow">Resumen</p>
+        <h2 id="overview-title" class="display-6 fw-bold mb-4">
+          Qué demuestra este proyecto
+        </h2>
+
+        <div class="row g-3">
+          <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100 p-4 rounded-4">
+              <p class="small text-body-secondary mb-1">Backend</p>
+              <p class="h5 mb-0">Node.js + Express</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100 p-4 rounded-4">
+              <p class="small text-body-secondary mb-1">Datos</p>
+              <p class="h5 mb-0">PostgreSQL + Sequelize</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100 p-4 rounded-4">
+              <p class="small text-body-secondary mb-1">Seguridad</p>
+              <p class="h5 mb-0">bcrypt + JWT</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100 p-4 rounded-4">
+              <p class="small text-body-secondary mb-1">Clientes</p>
+              <p class="h5 mb-0">Web + CLI + Postman</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      Problema y solución:
+      primero explicamos el porqué del producto y luego su implementación.
+    -->
+    <section class="section-block py-5" aria-labelledby="problem-title">
+      <div class="container">
+        <div class="row g-5">
+          <div class="col-lg-6">
+            <p class="eyebrow">Contexto</p>
+            <h2 id="problem-title" class="h1">Problema</h2>
+            <p>
+              HelpDesk busca centralizar solicitudes de soporte en tickets
+              que puedan crearse, consultarse, editarse, filtrarse y cerrarse.
+              Cada ticket puede registrar prioridad, urgencia, progreso,
+              fecha de vencimiento y un archivo adjunto.
+            </p>
+          </div>
+
+          <div class="col-lg-6">
+            <p class="eyebrow">Implementación</p>
+            <h2 class="h1">Solución</h2>
+            <p>
+              La aplicación expone una API REST en Express. Los controllers
+              traducen HTTP hacia services reutilizables; Sequelize representa
+              el modelo relacional y PostgreSQL mantiene la persistencia.
+            </p>
+            <p class="mb-0">
+              La interfaz Web y el CLI consumen esa misma API, evitando
+              duplicar las reglas de negocio en clientes diferentes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      Preview:
+      mock visual construido con HTML + Bootstrap.
+      Puede reemplazarse por una captura real más adelante.
+    -->
+    <section class="section-block py-5" aria-labelledby="preview-title">
+      <div class="container">
+        <p class="eyebrow">Vista representativa</p>
+        <h2 id="preview-title" class="display-6 fw-bold mb-4">
+          Flujo de gestión de tickets
+        </h2>
+
+        <div
+          class="project-visual rounded-4 p-3 p-md-5"
+          role="img"
+          aria-label="Representación de la interfaz HelpDesk con tres tickets"
+        >
+          <div class="mock-window mx-auto">
+            <div class="mock-window-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="mock-window-body">
+              <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-4">
+                <div>
+                  <strong class="d-block">Tickets</strong>
+                  <small class="text-body-secondary">Estado actual del soporte</small>
+                </div>
+                <button class="btn btn-primary btn-sm" type="button" disabled>
+                  New ticket
+                </button>
+              </div>
+
+              <div class="mock-ticket">
+                <span>
+                  <strong>API returns 500</strong>
+                  <small class="d-block text-body-secondary">Progress: 60%</small>
+                </span>
+                <span class="badge text-bg-warning">In progress</span>
+              </div>
+              <div class="mock-ticket">
+                <span>
+                  <strong>Reset user password</strong>
+                  <small class="d-block text-body-secondary">Progress: 100%</small>
+                </span>
+                <span class="badge text-bg-success">Closed</span>
+              </div>
+              <div class="mock-ticket">
+                <span>
+                  <strong>Upload evidence</strong>
+                  <small class="d-block text-body-secondary">Urgent</small>
+                </span>
+                <span class="badge text-bg-danger">Open</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="small text-body-secondary mt-3 mb-0">
+          Esta representación está construida con HTML y Bootstrap para que el
+          ejemplo sea autocontenido. En un portafolio real conviene reemplazarla
+          o complementarla con capturas auténticas de la aplicación.
+        </p>
+      </div>
+    </section>
+
+    <!-- Funcionalidades principales del producto. -->
+    <section class="section-block py-5" aria-labelledby="features-title">
+      <div class="container">
+        <p class="eyebrow">Funcionalidades</p>
+        <h2 id="features-title" class="display-6 fw-bold mb-4">
+          Capacidades principales
+        </h2>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Autenticación</h3>
+                <p class="mb-0 text-body-secondary">
+                  Registro, login, password hashing con bcrypt y protección de
+                  endpoints mediante JWT y express-jwt.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">CRUD de tickets</h3>
+                <p class="mb-0 text-body-secondary">
+                  Creación, lectura, actualización y eliminación con filtros
+                  por estado, prioridad, urgencia y progreso mínimo.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Archivos adjuntos</h3>
+                <p class="mb-0 text-body-secondary">
+                  Upload multipart, validación de archivo, generación de nombre
+                  seguro y asociación del path al ticket.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Múltiples clientes</h3>
+                <p class="mb-0 text-body-secondary">
+                  Web y CLI reutilizan el mismo contrato HTTP y las mismas
+                  capacidades del backend.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Arquitectura: explica cómo se conectan clientes, API y datos. -->
+    <section class="section-block py-5" aria-labelledby="architecture-title">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <p class="eyebrow">Arquitectura</p>
+            <h2 id="architecture-title" class="display-6 fw-bold">
+              Un backend, varios clientes
+            </h2>
+
+            <pre class="architecture-diagram"><code>Web ───────┐
+           │
+CLI ───────┼──→ REST API
+           │        ↓
+Postman ───┘    Middlewares
+                    ↓
+                Controllers
+                    ↓
+                 Services
+                    ↓
+                  Models
+                    ↓
+                Sequelize
+                    ↓
+               PostgreSQL</code></pre>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <h3 class="h5">Modelo de datos</h3>
+                <ul class="list-unstyled d-grid gap-2 mb-0">
+                  <li><code>User 1:1 Profile</code></li>
+                  <li><code>User 1:N Ticket</code></li>
+                  <li><code>User N:M Role</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contrato HTTP: endpoints REST representativos. -->
+    <section class="section-block py-5" aria-labelledby="api-title">
+      <div class="container">
+        <p class="eyebrow">Contrato HTTP</p>
+        <h2 id="api-title" class="display-6 fw-bold mb-4">
+          API REST
+        </h2>
+
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th scope="col">Método</th>
+                <th scope="col">Endpoint</th>
+                <th scope="col">Responsabilidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/v1/auth/login</code></td>
+                <td>Autenticar usuario y emitir JWT.</td>
+              </tr>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/v1/tickets</code></td>
+                <td>Listar tickets y aplicar filtros.</td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/v1/tickets</code></td>
+                <td>Crear un ticket autenticado.</td>
+              </tr>
+              <tr>
+                <td><code>PUT</code></td>
+                <td><code>/api/v1/tickets/:id</code></td>
+                <td>Actualizar un ticket.</td>
+              </tr>
+              <tr>
+                <td><code>DELETE</code></td>
+                <td><code>/api/v1/tickets/:id</code></td>
+                <td>Eliminar un ticket.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mb-0">
+          Ejemplo de filtro: <code>/api/v1/tickets?status=in_progress&amp;urgent=true&amp;minProgress=50</code>
+        </p>
+      </div>
+    </section>
+
+    <!-- Decisiones técnicas: aquí demostramos criterio, no solo tecnologías. -->
+    <section class="section-block py-5" aria-labelledby="decisions-title">
+      <div class="container">
+        <p class="eyebrow">Criterio técnico</p>
+        <h2 id="decisions-title" class="display-6 fw-bold mb-4">
+          Decisiones que vale la pena explicar
+        </h2>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Una API común</h3>
+                <p class="mb-0 text-body-secondary">
+                  Web y CLI consumen la misma API para no duplicar el CRUD ni
+                  las reglas de negocio.
+                </p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Identidad desde el JWT</h3>
+                <p class="mb-0 text-body-secondary">
+                  El <code>userId</code> de operaciones protegidas se obtiene
+                  desde <code>req.auth.sub</code> y no desde un body controlado
+                  por el cliente.
+                </p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Password hashing</h3>
+                <p class="mb-0 text-body-secondary">
+                  Las contraseñas se verifican con bcrypt y no se almacenan
+                  como texto plano.
+                </p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6">
+            <article class="card h-100 border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="h5">Uploads controlados</h3>
+                <p class="mb-0 text-body-secondary">
+                  Los archivos se validan y reciben nombres generados para
+                  reducir colisiones y evitar confiar en el nombre original.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Desafío y aprendizaje: evidencia del proceso de resolución. -->
+    <section class="section-block py-5" aria-labelledby="challenge-title">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <p class="eyebrow">Desafío</p>
+            <h2 id="challenge-title" class="h1">
+              SSR y estado de autenticación
+            </h2>
+            <p>
+              Handlebars se renderiza en servidor, mientras el JWT del cliente
+              Web se guarda en <code>localStorage</code>. Por eso el template no
+              puede leer directamente ese estado del navegador durante
+              <code>res.render()</code>.
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="eyebrow">Aprendizaje</p>
+            <h2 class="h1">Separar UX de seguridad</h2>
+            <p>
+              JavaScript cliente actualiza la navegación según el estado local,
+              mientras que la seguridad real permanece en la API mediante
+              <code>express-jwt</code>. Ocultar un enlace no sustituye proteger
+              un endpoint.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block py-5" aria-labelledby="closing-title">
+      <div class="container">
+        <div class="contact-panel rounded-4 p-4 p-lg-5 text-center">
+          <p class="eyebrow">Código y contacto</p>
+          <h2 id="closing-title" class="display-6 fw-bold">
+            ¿Quieres revisar la implementación?
+          </h2>
+          <p class="lead mx-auto col-lg-8">
+            El repositorio contiene la aplicación completa. El portafolio
+            resume el problema, la arquitectura y las decisiones que vale la
+            pena discutir en una entrevista técnica.
+          </p>
+          <div class="d-flex flex-wrap justify-content-center gap-2">
+            <!--
+              Usar aquí el MISMO dominio Railway del botón superior.
+              Si cambia el deploy, actualizar ambos links.
+            -->
+            <a
+              class="btn btn-primary"
+              href="https://TU_DOMINIO.up.railway.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Probar aplicación
+            </a>
+
+            <a
+              class="btn btn-outline-secondary"
+              href="https://github.com/TU_USUARIO/helpdesk"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver repositorio
+            </a>
+
+            <a class="btn btn-outline-secondary" href="../index.html#contact">
+              Contactarme
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer: vuelve a conectar el proyecto con la identidad profesional. -->
+  <footer class="border-top py-4">
+    <div class="container d-flex flex-column flex-md-row gap-2 justify-content-between">
+      <p class="mb-0 small text-body-secondary">
+        © <span data-current-year></span> Nombre Apellido.
+      </p>
+      <a class="small" href="../index.html">Volver al portafolio</a>
+    </div>
+  </footer>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"
+  ></script>
+  <!--
+    main.js está en la raíz del portafolio:
+    ../ sube desde projects/ y luego entra a js/.
+  -->
+  <script src="../js/main.js" defer></script>
+</body>
+</html>

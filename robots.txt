@@ -1,0 +1,18 @@
+# robots.txt
+# ----------
+# Instrucciones básicas para crawlers.
+#
+# IMPORTANTE:
+# robots.txt controla principalmente RASTREO.
+# No es un mecanismo de privacidad y no reemplaza noindex.
+
+# * significa "todos los user-agents/crawlers".
+User-agent: *
+
+# / representa todo el sitio: permitimos su rastreo.
+Allow: /
+
+# Indicamos la URL pública del sitemap.
+# Reemplazar TU_USUARIO y la ruta del repositorio antes de publicar.
+Sitemap: https://TU_USUARIO.github.io/portfolio/sitemap.xml
+ 

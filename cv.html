@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--
+  cv.html
+  =======
+  CV navegable dentro del propio portafolio.
+
+  Objetivos:
+  - ofrecer un CV funcional desde el primer momento;
+  - mantener contacto, proyectos y tecnologías sincronizados;
+  - permitir impresión o guardado como PDF desde el navegador.
+-->
+<html lang="es" data-bs-theme="light">
+<head>
+  <!-- Metadata básica del CV. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV | Nombre Apellido</title>
+  <meta
+    name="description"
+    content="Currículum profesional de Nombre Apellido, Full Stack JavaScript Developer."
+  >
+  <!--
+    noindex:
+    el CV es público pero no queremos que compita con la Home como
+    resultado principal de marca personal.
+    noindex NO es una medida de privacidad.
+  -->
+  <meta name="robots" content="noindex,follow">
+
+  <!-- Mantiene la misma preferencia de tema que el resto del sitio. -->
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+      document.documentElement.setAttribute("data-bs-theme", savedTheme ?? preferredTheme);
+    })();
+  </script>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+    crossorigin="anonymous"
+  >
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <!-- Accesibilidad: permite saltar directamente al contenido del CV. -->
+  <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <!-- Navegación mínima: identidad + cambio de tema. -->
+  <header class="border-bottom bg-body">
+    <nav class="navbar" aria-label="Navegación del CV">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="./index.html">Nombre Apellido</a>
+        <button
+          id="themeToggle"
+          class="btn btn-outline-secondary btn-sm"
+          type="button"
+          aria-pressed="false"
+        >
+          Cambiar tema
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =========================================================
+       CONTENIDO DEL CV
+       ========================================================= -->
+  <main id="main-content" class="container py-5 cv-page">
+    <!-- Encabezado: nombre, rol y vías de contacto. -->
+    <header class="mb-5">
+      <h1 class="display-5 fw-bold">Nombre Apellido</h1>
+      <p class="fs-4 mb-2">Full Stack JavaScript Developer</p>
+      <p class="mb-1">
+        <a href="mailto:nombre@example.com">nombre@example.com</a>
+        · <a href="tel:+56912345678">+56 9 1234 5678</a>
+      </p>
+      <p class="mb-0">
+        <a href="https://github.com/TU_USUARIO">GitHub</a>
+        · <a href="https://www.linkedin.com/in/TU_USUARIO">LinkedIn</a>
+        · <a href="./index.html">Portafolio</a>
+      </p>
+    </header>
+
+    <!-- Perfil profesional breve. -->
+    <section class="mb-5" aria-labelledby="profile-title">
+      <h2 id="profile-title" class="h3">Perfil</h2>
+      <p>
+        Desarrollador Full Stack JavaScript con experiencia formativa en
+        Node.js, Express, PostgreSQL, APIs REST y desarrollo frontend.
+      </p>
+    </section>
+
+    <!-- Proyecto destacado: enlaza al caso de estudio del portafolio. -->
+    <section class="mb-5" aria-labelledby="project-cv-title">
+      <h2 id="project-cv-title" class="h3">Proyecto destacado</h2>
+      <h3 class="h5">HelpDesk</h3>
+      <p>
+        Aplicación Full Stack de gestión de tickets con autenticación JWT,
+        PostgreSQL, Sequelize, interfaz Web y cliente CLI.
+      </p>
+      <a href="./projects/helpdesk.html">Ver caso de estudio</a>
+    </section>
+
+    <!-- Tecnologías: mantener esta lista alineada con proyectos reales. -->
+    <section class="mb-5" aria-labelledby="skills-cv-title">
+      <h2 id="skills-cv-title" class="h3">Tecnologías</h2>
+      <p>
+        JavaScript · Node.js · Express · PostgreSQL · Sequelize · HTML ·
+        Bootstrap · Git · GitHub
+      </p>
+    </section>
+
+    <!-- Formación: reemplazar por información real y consistente con LinkedIn. -->
+    <section aria-labelledby="education-title">
+      <h2 id="education-title" class="h3">Formación</h2>
+      <p>
+        Reemplazar esta sección con la formación real del autor y mantenerla
+        consistente con LinkedIn y el CV que se utilice fuera del sitio.
+      </p>
+    </section>
+
+    <!--
+      no-print:
+      styles.css oculta estos controles cuando imprimimos/guardamos como PDF.
+    -->
+    <div class="d-flex flex-wrap gap-2 mt-5 no-print">
+      <!-- window.print() abre el diálogo nativo de impresión del navegador. -->
+      <button class="btn btn-primary" type="button" onclick="window.print()">
+        Imprimir / guardar como PDF
+      </button>
+      <a class="btn btn-outline-secondary" href="./index.html">
+        Volver al portafolio
+      </a>
+    </div>
+  </main>
+
+  <!-- Reutilizamos el mismo JavaScript de tema/año/navbar del sitio. -->
+  <script src="./js/main.js" defer></script>
+</body>
+</html>
