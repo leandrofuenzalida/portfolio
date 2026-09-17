@@ -11,6 +11,74 @@
 :root {
   --portfolio-surface: rgba(127, 127, 127, 0.08);
   --portfolio-border: rgba(127, 127, 127, 0.18);
+
+  /* Tipografía personalizada */
+  --font-headings: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Roboto Mono", monospace;
+
+  /* Color primario - tema claro (verde oscuro) */
+  --bs-primary: #0d5a2d;
+  --bs-primary-rgb: 13, 90, 45;
+}
+
+/* Color primario - tema oscuro */
+html[data-bs-theme="dark"] {
+  --bs-primary: #82ffb6;
+  --bs-primary-rgb: 130, 255, 182;
+}
+
+/* Force botones a usar el color primario */
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #fff; /* Texto blanco en tema claro */
+}
+
+.btn-primary:hover {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  filter: brightness(0.9);
+}
+
+/* En tema oscuro, texto oscuro para contrastar con verde claro */
+html[data-bs-theme="dark"] .btn-primary {
+  color: #000;
+}
+
+/* Links con colores del tema */
+a {
+  text-underline-offset: 0.2em;
+  color: var(--bs-primary);
+}
+
+a:hover {
+  color: var(--bs-primary);
+  filter: brightness(0.8);
+}
+
+/* En tema oscuro */
+html[data-bs-theme="dark"] a {
+  color: var(--bs-primary);
+}
+
+html[data-bs-theme="dark"] a:hover {
+  color: var(--bs-primary);
+  filter: brightness(1.2);
+}
+
+/* Aplicar fuentes personalizadas */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-headings);
+}
+
+body,
+p {
+  font-family: var(--font-body);
 }
 
 /* Desplazamiento suave al usar links internos como #projects. */
@@ -70,7 +138,11 @@ a {
 .hero-section,
 .project-hero {
   background:
-    radial-gradient(circle at 85% 10%, rgba(13, 110, 253, 0.14), transparent 32rem),
+    radial-gradient(
+      circle at 85% 10%,
+      rgba(10, 255, 145, 0.196),
+      transparent 32rem
+    ),
     var(--bs-body-bg);
 }
 
@@ -115,7 +187,7 @@ a {
 .project-visual {
   min-height: 22rem;
   background:
-    linear-gradient(145deg, rgba(13, 110, 253, 0.18), rgba(111, 66, 193, 0.12)),
+    linear-gradient(145deg, rgba(13, 253, 125, 0.18), rgba(66, 193, 74, 0.12)),
     var(--portfolio-surface);
 }
 
@@ -222,7 +294,7 @@ a {
 
 .contact-panel {
   background:
-    linear-gradient(135deg, rgba(13, 110, 253, 0.1), transparent 60%),
+    linear-gradient(135deg, rgba(13, 253, 137, 0.1), transparent 60%),
     var(--bs-body-bg);
 }
 
